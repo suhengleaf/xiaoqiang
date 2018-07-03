@@ -1,4 +1,4 @@
-package com.suheng.test1;
+package com.suheng.test1.ui;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.suheng.test1.R;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -137,8 +139,8 @@ public class HomeFragment extends Fragment {
 
 
 
-//初始化控件
-private void initViews() {
+    //初始化控件
+    private void initViews() {
         client_host_ip =  (EditText)getActivity().findViewById(R.id.client_host_ip);
         client_port =  (EditText)getActivity().findViewById(R.id.client_port_ip);
 
