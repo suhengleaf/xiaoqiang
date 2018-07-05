@@ -21,8 +21,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     // Views
-    private ViewPager mViewPager;
-    private BottomNavigationView bottomNavigationView;
+
     // Variables
     private ArrayList<Fragment> fgLists=new ArrayList<>(3);
 
@@ -42,10 +41,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        mViewPager = (ViewPager) findViewById(R.id.mViewPager);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.mViewPager);
         mViewPager.setAdapter(new MPagerAdapter(getSupportFragmentManager(), fgLists));
         mViewPager.setOffscreenPageLimit(2);    //预加载剩下两页
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new OnNavigationItemSelectedMainActivity(mViewPager));
     }
 }

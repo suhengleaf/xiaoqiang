@@ -28,6 +28,8 @@ public class OnNavigationItemSelectedMainActivity implements BottomNavigationVie
             case R.id.navigation_notifications:
                 mViewPager.setCurrentItem(2);
                 break;
+            default:
+                break;
         }
         return true;
     }

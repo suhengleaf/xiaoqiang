@@ -11,16 +11,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.suheng.test1.R;
 import com.suheng.test1.adapter.MailAdapter;
 import com.suheng.test1.entity.Mail;
+import com.suheng.test1.listener.OnClickAllOrderMailFragment;
+import com.suheng.test1.listener.OnClickNoOrderMailFragment;
+import com.suheng.test1.listener.OnClickOrderMailFragment;
 
 import java.util.Vector;
 
 public class MailFragment extends Fragment {
     // Views
-    RecyclerView recyclerView;
     View view;
     // Variables
     Vector<Mail> mList;
@@ -44,9 +47,15 @@ public class MailFragment extends Fragment {
     }
 
     private void initViews() {
-        recyclerView = (RecyclerView) view.findViewById(R.id.mail_list);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.mail_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new MailAdapter(mList));
+        Button allOrderButton = (Button) view.findViewById(R.id.fragment_mail_all_order);
+        Button noOrderButton = (Button) view.findViewById(R.id.fragment_mail_no_order);
+        Button orderButton = (Button) view.findViewById(R.id.fragment_mail_order);
+        allOrderButton.setOnClickListener(new OnClickAllOrderMailFragment(this));
+        noOrderButton.setOnClickListener(new OnClickNoOrderMailFragment(this));
+        orderButton.setOnClickListener(new OnClickOrderMailFragment(this));
     }
 
 }
