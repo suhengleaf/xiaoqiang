@@ -51,7 +51,7 @@
             android:layout_height="1dp"
             android:layout_weight="1"
             android:background="@color/blue"
-            android:visibility="invisible"
+            android:visibility="visible"
             android:id="@+id/underline_all_order"/>
 
         <View
@@ -75,5 +75,6 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="16dp"
         android:id="@+id/mail_list"/>
 </LinearLayout>

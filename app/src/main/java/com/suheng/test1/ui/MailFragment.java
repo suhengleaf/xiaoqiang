@@ -1,7 +1,5 @@
 package com.suheng.test1.ui;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 //import android.app.Fragment;
 import android.support.annotation.Nullable;
@@ -15,10 +13,11 @@ import android.widget.Button;
 
 import com.suheng.test1.R;
 import com.suheng.test1.adapter.MailAdapter;
-import com.suheng.test1.entity.Mail;
+import com.suheng.test1.entity.MailEntity;
 import com.suheng.test1.listener.OnClickAllOrderMailFragment;
 import com.suheng.test1.listener.OnClickNoOrderMailFragment;
 import com.suheng.test1.listener.OnClickOrderMailFragment;
+import com.suheng.test1.utils.CalendarBuilder;
 
 import java.util.Vector;
 
@@ -26,13 +25,14 @@ public class MailFragment extends Fragment {
     // Views
     View view;
     // Variables
-    Vector<Mail> mList;
+    Vector<MailEntity> mList;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.fragment_mail,container,false);
         initVariables();
+        loadData();
         initViews();
         return view;
     }
@@ -42,8 +42,15 @@ public class MailFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    private void loadData() {
+        // 加载测试数据
+        mList.add(new MailEntity("顺丰快递", ".develop.", CalendarBuilder.get(2000, 1, 1, 1, 1, 1), CalendarBuilder.get(2000, 1,1, 1, 1, 1), CalendarBuilder.get(1, 1, 1, 1, 1, 1), 1, 1, "配送中"));
+        mList.add(new MailEntity("顺丰快递", ".develop.", CalendarBuilder.get(2000, 1, 1, 1, 1, 1), CalendarBuilder.get(2000, 1,1, 1, 1, 1), CalendarBuilder.get(1, 1, 1, 1, 1, 1), 1, 1, "配送中"));
+        mList.add(new MailEntity("顺丰快递", ".develop.", CalendarBuilder.get(2000, 1, 1, 1, 1, 1), CalendarBuilder.get(2000, 1,1, 1, 1, 1), CalendarBuilder.get(1, 1, 1, 1, 1, 1), 1, 1, "配送中"));
+    }
+
     private void initVariables() {
-        mList = new Vector<Mail>();
+        mList = new Vector<MailEntity>();
     }
 
     private void initViews() {
@@ -57,5 +64,4 @@ public class MailFragment extends Fragment {
         noOrderButton.setOnClickListener(new OnClickNoOrderMailFragment(this));
         orderButton.setOnClickListener(new OnClickOrderMailFragment(this));
     }
-
 }

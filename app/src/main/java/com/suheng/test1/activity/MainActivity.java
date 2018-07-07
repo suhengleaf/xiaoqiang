@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 
+import com.suheng.test1.listener.OnPageChangeMailActivity;
 import com.suheng.test1.ui.HomeFragment;
 import com.suheng.test1.ui.MailFragment;
 import com.suheng.test1.ui.PersonFragment;
@@ -21,7 +22,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     // Views
-
+    BottomNavigationView bottomNavigationView;
+    ViewPager mViewPager;
     // Variables
     private ArrayList<Fragment> fgLists=new ArrayList<>(3);
 
@@ -41,11 +43,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.mViewPager);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        mViewPager = (ViewPager) findViewById(R.id.mViewPager);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new OnNavigationItemSelectedMainActivity(mViewPager));
+        mViewPager = (ViewPager) findViewById(R.id.mViewPager);
         mViewPager.setAdapter(new MPagerAdapter(getSupportFragmentManager(), fgLists));
         mViewPager.setOffscreenPageLimit(2);    //预加载剩下两页
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new OnNavigationItemSelectedMainActivity(mViewPager));
+        mViewPager.addOnPageChangeListener(new OnPageChangeMailActivity(bottomNavigationView));
     }
 }
 
