@@ -34,7 +34,7 @@
             android:background="@color/white"
             android:padding="@dimen/normal_space">
 
-            <com.suheng.test1.RoundImageView
+            <com.suheng.test1.ui.RoundImageView
                 android:id="@+id/UserPhoto"
                 android:layout_width="60dp"
                 android:layout_height="60dp"

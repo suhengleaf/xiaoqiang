@@ -50,18 +50,18 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.MailItemViewHo
 
         MailItemViewHolder(View itemView) {
             super(itemView);
-            initView(itemView);
+            initViews();
         }
 
         // 初始化视图变量
-        void initView(View view) {
-            this.expressIconView = (ImageView) view.findViewById(R.id.mail_entity_express_icon);
-            this.expressNameView = (TextView) view.findViewById(R.id.mail_entity_express_name);
-            this.statusView = (TextView) view.findViewById(R.id.mail_entity_status);
-            this.taskIDView = (TextView) view.findViewById(R.id.mail_entity_task_id);
-            this.deliveryTimeView = (TextView) view.findViewById(R.id.mail_entity_delivery_time);
-            this.carIDView = (TextView) view.findViewById(R.id.mail_entity_car_id);
-            this.mailOKButton = (Button) view.findViewById(R.id.mail_entity_mail_ok);
+        void initViews() {
+            this.expressIconView = (ImageView) itemView.findViewById(R.id.mail_entity_express_icon);
+            this.expressNameView = (TextView) itemView.findViewById(R.id.mail_entity_express_name);
+            this.statusView = (TextView) itemView.findViewById(R.id.mail_entity_status);
+            this.taskIDView = (TextView) itemView.findViewById(R.id.mail_entity_task_id);
+            this.deliveryTimeView = (TextView) itemView.findViewById(R.id.mail_entity_delivery_time);
+            this.carIDView = (TextView) itemView.findViewById(R.id.mail_entity_car_id);
+            this.mailOKButton = (Button) itemView.findViewById(R.id.mail_entity_mail_ok);
         }
 
         // 修改实体数据

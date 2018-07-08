@@ -11,8 +11,10 @@ public class MailEntity {
     public int taskID;
     public int carID;
     public String status;
+    public String area;
+    public String description;
 
-    public MailEntity(Task task, Express express) {
+    public MailEntity(Task task, Express express, Address address) {
         this.expressName    =   express.expressName;
         this.expressIcon    =   express.expressicon;
         this.startTime      =   task.starttime;
@@ -21,9 +23,11 @@ public class MailEntity {
         this.taskID         =   task.taskID;
         this.carID          =   task.carID;
         this.status         =   task.status;
+        this.area           =   address.area;
+        this.description    =   address.description;
     }
 
-    public MailEntity(String expressName, String expressIcon, Calendar startTime, Calendar deliveryTime, Calendar finishTime, int taskID, int carID, String status) {
+    public MailEntity(String expressName, String expressIcon, Calendar startTime, Calendar deliveryTime, Calendar finishTime, int taskID, int carID, String status, String area, String description) {
         this.expressName = expressName;
         this.expressIcon = expressIcon;
         this.startTime = startTime;
@@ -32,5 +36,7 @@ public class MailEntity {
         this.taskID = taskID;
         this.carID = carID;
         this.status = status;
+        this.area = area;
+        this.description = description;
     }
 }

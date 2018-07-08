@@ -1,4 +1,4 @@
-package com.suheng.test1;
+package com.suheng.test1.ui;
 
 /**
  * 作者：GXL on 2016/8/3 0003

@@ -5,11 +5,12 @@
     android:orientation="vertical"
     tools:context="com.suheng.test1.ui.HomeFragment">
 
-    <android.support.v4.view.ViewPager
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_margin="8dp"
-        android:id="@+id/fragment_home_images"/>
+        android:id="@+id/fragment_home_images"
+        android:background="@color/blue"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -58,5 +59,6 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp"/>
+        android:id="@+id/fragment_home_items"
+        />
 </LinearLayout>

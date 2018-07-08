@@ -1,44 +1,35 @@
 package com.suheng.test1.ui;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 //import android.app.Fragment;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.suheng.test1.R;
+import com.suheng.test1.adapter.MailHomeAdapter;
+import com.suheng.test1.entity.MailEntity;
+import com.suheng.test1.utils.CalendarBuilder;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.util.Vector;
 
 
 public class HomeFragment extends Fragment {
-
+    // Views
+    private View view;
+    // Variables
+    private Vector<MailEntity> mList;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //R.layout.fragment_my为该fragment的布局
-        View view=inflater.inflate(R.layout.fragment_home,container,false);
+        view=inflater.inflate(R.layout.fragment_home,container,false);
         initVariables();
+        loadData();
         initViews();
         return view;
     }
@@ -50,10 +41,18 @@ public class HomeFragment extends Fragment {
     }
 
     private void initVariables() {
+        mList = new Vector<MailEntity>();
+    }
 
+    private void loadData() {
+        mList.add(new MailEntity("顺丰快递", ".develop.", CalendarBuilder.get(2000, 1, 1, 1, 1, 1), CalendarBuilder.get(2000, 1,1, 1, 1, 1), CalendarBuilder.get(1, 1, 1, 1, 1, 1), 1, 1, "配送中", "1", "1"));
+        mList.add(new MailEntity("顺丰快递", ".develop.", CalendarBuilder.get(2000, 1, 1, 1, 1, 1), CalendarBuilder.get(2000, 1,1, 1, 1, 1), CalendarBuilder.get(1, 1, 1, 1, 1, 1), 1, 1, "配送中", "1", "1"));
+        mList.add(new MailEntity("顺丰快递", ".develop.", CalendarBuilder.get(2000, 1, 1, 1, 1, 1), CalendarBuilder.get(2000, 1,1, 1, 1, 1), CalendarBuilder.get(1, 1, 1, 1, 1, 1), 1, 1, "配送中", "1", "1"));
     }
 
     private void initViews() {
-
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_home_items);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(new MailHomeAdapter(mList));
     }
 }

@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.suheng.test1.DeliveryInformationActivity;
+import com.suheng.test1.activity.DeliveryInformationActivity;
 import com.suheng.test1.R;
 
 public class PersonFragment extends Fragment {
