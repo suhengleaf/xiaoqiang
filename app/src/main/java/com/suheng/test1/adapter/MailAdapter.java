@@ -1,5 +1,6 @@
 package com.suheng.test1.adapter;
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import com.suheng.test1.R;
 import com.suheng.test1.entity.MailEntity;
+import com.suheng.test1.listener.OnClickMailConfirmButton;
+import com.suheng.test1.listener.OnClickMailDetailButton;
 import com.suheng.test1.utils.Convert;
 
 import java.util.Locale;
@@ -18,6 +21,7 @@ import java.util.Vector;
 public class MailAdapter extends RecyclerView.Adapter<MailAdapter.MailItemViewHolder> {
 
     private Vector<MailEntity> mList;
+    private Activity activity;
 
     public MailAdapter(Vector<MailEntity> mList) {
         this.mList = mList;
@@ -39,14 +43,15 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.MailItemViewHo
         return mList.size();
     }
 
-    static class MailItemViewHolder extends RecyclerView.ViewHolder {
+    class MailItemViewHolder extends RecyclerView.ViewHolder {
         private ImageView expressIconView;
         private TextView expressNameView;
         private TextView statusView;
         private TextView taskIDView;
         private TextView deliveryTimeView;
         private TextView carIDView;
-        private Button mailOKButton;
+        private Button mailConfirmButton;
+        private Button mailDetailButton;
 
         MailItemViewHolder(View itemView) {
             super(itemView);
@@ -61,7 +66,8 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.MailItemViewHo
             this.taskIDView = (TextView) itemView.findViewById(R.id.mail_entity_task_id);
             this.deliveryTimeView = (TextView) itemView.findViewById(R.id.mail_entity_delivery_time);
             this.carIDView = (TextView) itemView.findViewById(R.id.mail_entity_car_id);
-            this.mailOKButton = (Button) itemView.findViewById(R.id.mail_entity_mail_ok);
+            this.mailConfirmButton = (Button) itemView.findViewById(R.id.mail_entity_mail_ok);
+            this.mailDetailButton = (Button) itemView.findViewById(R.id.mail_detail_button);
         }
 
         // 修改实体数据
@@ -71,6 +77,8 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.MailItemViewHo
             taskIDView.setText(String.format(Locale.CHINA, "订单编号：%d", entity.taskID));
             deliveryTimeView.setText(String.format(Locale.CHINA, "配送时间：%s", Convert.Calendar2String(entity.deliveryTime, "未定义")));
             carIDView.setText(String.format(Locale.CHINA, "派送车辆：%d", entity.carID));
+            mailDetailButton.setOnClickListener(new OnClickMailDetailButton(itemView.getContext(), entity.taskID));
+            mailConfirmButton.setOnClickListener(new OnClickMailConfirmButton(entity.taskID, activity));
         }
     }
 }

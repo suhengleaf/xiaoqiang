@@ -1,7 +1,6 @@
 package com.suheng.test1.ui;
 
 import android.os.Bundle;
-//import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,15 +10,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.suheng.test1.R;
+import com.suheng.test1.activity.MainActivity;
 import com.suheng.test1.adapter.MailAdapter;
+import com.suheng.test1.entity.Address;
+import com.suheng.test1.entity.Express;
 import com.suheng.test1.entity.MailEntity;
+import com.suheng.test1.entity.Task;
 import com.suheng.test1.listener.OnClickAllOrderMailFragment;
 import com.suheng.test1.listener.OnClickNoOrderMailFragment;
 import com.suheng.test1.listener.OnClickOrderMailFragment;
-import com.suheng.test1.utils.CalendarBuilder;
+import com.suheng.test1.net.ServerAPI;
 
+import java.io.IOException;
+import java.util.Locale;
 import java.util.Vector;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MailFragment extends Fragment {
     // Views
@@ -32,8 +46,8 @@ public class MailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.fragment_mail,container,false);
         initVariables();
-        loadData();
         initViews();
+        loadData();
         return view;
     }
 
@@ -43,10 +57,7 @@ public class MailFragment extends Fragment {
     }
 
     private void loadData() {
-        // 加载测试数据
-        mList.add(new MailEntity("顺丰快递", ".develop.", CalendarBuilder.get(2000, 1, 1, 1, 1, 1), CalendarBuilder.get(2000, 1,1, 1, 1, 1), CalendarBuilder.get(1, 1, 1, 1, 1, 1), 1, 1, "配送中", "1", "1"));
-        mList.add(new MailEntity("顺丰快递", ".develop.", CalendarBuilder.get(2000, 1, 1, 1, 1, 1), CalendarBuilder.get(2000, 1,1, 1, 1, 1), CalendarBuilder.get(1, 1, 1, 1, 1, 1), 1, 1, "配送中", "1", "1"));
-        mList.add(new MailEntity("顺丰快递", ".develop.", CalendarBuilder.get(2000, 1, 1, 1, 1, 1), CalendarBuilder.get(2000, 1,1, 1, 1, 1), CalendarBuilder.get(1, 1, 1, 1, 1, 1), 1, 1, "配送中", "1", "1"));
+        downloadData();
     }
 
     private void initVariables() {
@@ -63,5 +74,41 @@ public class MailFragment extends Fragment {
         allOrderButton.setOnClickListener(new OnClickAllOrderMailFragment(this));
         noOrderButton.setOnClickListener(new OnClickNoOrderMailFragment(this));
         orderButton.setOnClickListener(new OnClickOrderMailFragment(this));
+    }
+
+    private void downloadData() {
+        mList.clear();
+        if (MainActivity.user == null)
+            return;
+        final OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(String.format(Locale.CHINA, "http://%s/task?userid=%d", ServerAPI.SERVER_IP, MainActivity.user.id))
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // 连接失败
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    JSONArray array = JSON.parseObject(response.body().string()).getJSONArray("TaskList");
+                    for (int i=0;i<array.size();i++) {
+                        Request expressRequest = new Request.Builder().build(); // 快递公司查询接口 TODO
+                        Response expressResponse = client.newCall(expressRequest).execute();
+                        Request addressRequest = new Request.Builder()
+                                .url(String.format(Locale.CHINA, "http://%s/address", ServerAPI.SERVER_IP, MainActivity.user.id)) // 查询地址接口 TODO
+                                .build();
+                        Response addressResponse = client.newCall(addressRequest).execute();
+                        JSONObject taskJSON = array.getJSONObject(i);
+                        JSONObject expressJSON = JSON.parseObject(expressResponse.body().string());
+                        JSONObject addressJSON = JSON.parseObject(addressResponse.body().string());
+                        mList.add(new MailEntity(new Task(taskJSON), new Express(expressJSON), new Address(addressJSON)));
+                    }
+                }
+                ((RecyclerView)view.findViewById(R.id.mail_list)).getAdapter().notifyDataSetChanged();
+            }
+        });
     }
 }

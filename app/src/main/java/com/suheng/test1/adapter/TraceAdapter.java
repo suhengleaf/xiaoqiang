@@ -53,6 +53,11 @@ public class TraceAdapter extends RecyclerView.Adapter<TraceAdapter.TraceViewHol
         }
     }
 
+    public void mNotify() {
+        Collections.sort(traceVector, new TraceEntity.TraceEntityCompare());
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return traceVector.size();

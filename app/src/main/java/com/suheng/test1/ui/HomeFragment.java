@@ -10,12 +10,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.suheng.test1.R;
+import com.suheng.test1.activity.MainActivity;
 import com.suheng.test1.adapter.MailHomeAdapter;
+import com.suheng.test1.entity.Address;
+import com.suheng.test1.entity.Express;
 import com.suheng.test1.entity.MailEntity;
+import com.suheng.test1.entity.Task;
+import com.suheng.test1.net.ServerAPI;
 import com.suheng.test1.utils.CalendarBuilder;
 
+import java.io.IOException;
+import java.util.Locale;
 import java.util.Vector;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class HomeFragment extends Fragment {
@@ -37,7 +53,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     private void initVariables() {
@@ -45,14 +60,48 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadData() {
-        mList.add(new MailEntity("顺丰快递", ".develop.", CalendarBuilder.get(2000, 1, 1, 1, 1, 1), CalendarBuilder.get(2000, 1,1, 1, 1, 1), CalendarBuilder.get(1, 1, 1, 1, 1, 1), 1, 1, "配送中", "1", "1"));
-        mList.add(new MailEntity("顺丰快递", ".develop.", CalendarBuilder.get(2000, 1, 1, 1, 1, 1), CalendarBuilder.get(2000, 1,1, 1, 1, 1), CalendarBuilder.get(1, 1, 1, 1, 1, 1), 1, 1, "配送中", "1", "1"));
-        mList.add(new MailEntity("顺丰快递", ".develop.", CalendarBuilder.get(2000, 1, 1, 1, 1, 1), CalendarBuilder.get(2000, 1,1, 1, 1, 1), CalendarBuilder.get(1, 1, 1, 1, 1, 1), 1, 1, "配送中", "1", "1"));
+        downloadData();
     }
 
     private void initViews() {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_home_items);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new MailHomeAdapter(mList));
+    }
+
+    private void downloadData() {
+        mList.clear();
+        if (MainActivity.user == null)
+            return;
+        final OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(String.format(Locale.CHINA, "http://%s/task?userid=%d", ServerAPI.SERVER_IP, MainActivity.user.id))
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // 连接失败
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    JSONArray array = JSON.parseObject(response.body().string()).getJSONArray("TaskList");
+                    for (int i=0;i<array.size();i++) {
+                        Request expressRequest = new Request.Builder().build(); // 快递公司查询接口 TODO
+                        Response expressResponse = client.newCall(expressRequest).execute();
+                        Request addressRequest = new Request.Builder()
+                                .url(String.format(Locale.CHINA, "http://%s/address", ServerAPI.SERVER_IP, MainActivity.user.id)) // 查询地址接口 TODO
+                                .build();
+                        Response addressResponse = client.newCall(addressRequest).execute();
+                        JSONObject taskJSON = array.getJSONObject(i);
+                        JSONObject expressJSON = JSON.parseObject(expressResponse.body().string());
+                        JSONObject addressJSON = JSON.parseObject(addressResponse.body().string());
+                        mList.add(new MailEntity(new Task(taskJSON), new Express(expressJSON), new Address(addressJSON)));
+                    }
+                }
+                ((RecyclerView)view.findViewById(R.id.mail_list)).getAdapter().notifyDataSetChanged();
+            }
+        });
     }
 }

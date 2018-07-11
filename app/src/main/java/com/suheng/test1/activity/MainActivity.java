@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 
+import com.suheng.test1.entity.User;
 import com.suheng.test1.listener.OnPageChangeMailActivity;
 import com.suheng.test1.ui.HomeFragment;
 import com.suheng.test1.ui.MailFragment;
@@ -22,10 +23,12 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     // Views
-    BottomNavigationView bottomNavigationView;
-    ViewPager mViewPager;
+    private BottomNavigationView bottomNavigationView;
+    private ViewPager mViewPager;
     // Variables
     private ArrayList<Fragment> fgLists=new ArrayList<>(3);
+
+    public static User user = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

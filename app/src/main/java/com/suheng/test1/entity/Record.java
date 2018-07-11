@@ -1,6 +1,11 @@
 package com.suheng.test1.entity;
 
+import com.alibaba.fastjson.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class Record {
     public int Record;                  // 记录ID
@@ -15,5 +20,19 @@ public class Record {
         this.time = time;
         this.detail = detail;
         this.UID = UID;
+    }
+
+    public Record(JSONObject jsonObject) {
+        this.Record = jsonObject.getIntValue("Record");
+        this.taskID = jsonObject.getIntValue("taskID");
+        this.UID = jsonObject.getIntValue("UID");
+        this.detail = jsonObject.getString("detail");
+        this.time = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy--MM--dd HH:mm:ss", Locale.CHINA);
+        try {
+            time.setTime(sdf.parse(jsonObject.getString("time")));
+        } catch (ParseException e) {
+            time.set(1, 1, 1);
+        }
     }
 }

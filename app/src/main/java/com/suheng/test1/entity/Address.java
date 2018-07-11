@@ -1,5 +1,7 @@
 package com.suheng.test1.entity;
 
+import com.alibaba.fastjson.JSONObject;
+
 public class Address {
     public int addressID;                   // 地址ID
     public String area;                     // 区域
@@ -11,5 +13,12 @@ public class Address {
         this.area = area;
         this.description = description;
         this.UID = UID;
+    }
+
+    public Address(JSONObject jsonObject) {
+        this.addressID = jsonObject.getIntValue("addressid");
+        this.area = jsonObject.getString("area");
+        this.description = jsonObject.getString("description");
+        this.UID = jsonObject.getIntValue("UID");
     }
 }

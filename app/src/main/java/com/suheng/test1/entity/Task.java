@@ -1,6 +1,11 @@
 package com.suheng.test1.entity;
 
+import com.alibaba.fastjson.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class Task {
     public int taskID;                  // 任务ID
@@ -25,5 +30,25 @@ public class Task {
         this.carID = carID;
         this.status = status;
         this.desID = desID;
+    }
+
+    public Task(JSONObject jsonObject) {
+        this.taskID = jsonObject.getIntValue("taskID");
+        this.order = jsonObject.getString("order");
+        this.expressID = jsonObject.getIntValue("expressID");
+        this.uid = jsonObject.getIntValue("UID");
+        this.carID = jsonObject.getIntValue("carID");
+        this.status = jsonObject.getString("status");
+        this.desID = jsonObject.getString("desID");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy--MM--dd HH:mm:ss", Locale.CHINA);
+        try {
+            starttime.setTime(sdf.parse(jsonObject.getString("startTime")));
+            deliverytime.setTime(sdf.parse(jsonObject.getString("deliveryTime")));
+            finishtime.setTime(sdf.parse(jsonObject.getString("finishTime")));
+        } catch (ParseException e) {
+            starttime.set(1,1,1);
+            deliverytime.set(1,1,1);
+            finishtime.set(1,1,1);
+        }
     }
 }
