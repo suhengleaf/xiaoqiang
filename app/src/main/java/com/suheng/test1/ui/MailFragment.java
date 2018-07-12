@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public class MailFragment extends Fragment {
     View view;
     // Variables
     Vector<MailEntity> mList;
+    MailAdapter mailAdapter;
     private LinearLayout linearLayout;
     @Nullable
     @Override
@@ -62,34 +64,30 @@ public class MailFragment extends Fragment {
     }
 
     private void loadData() {
-        //downloadData();
+        downloadData();
     }
 
     private void initVariables() {
         mList = new Vector<MailEntity>();
+        mailAdapter = new MailAdapter(mList);
     }
 
     private void initViews() {
-        linearLayout=(LinearLayout) view.findViewById(R.id.to_login);
+        linearLayout=(LinearLayout) view.findViewById(R.id.to_login_mail_fragment);
         Button maillogin =(Button) view.findViewById(R.id.mail_login);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.mail_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new MailAdapter(mList));
+        recyclerView.setAdapter(mailAdapter);
         Button allOrderButton = (Button) view.findViewById(R.id.fragment_mail_all_order);
         Button noOrderButton = (Button) view.findViewById(R.id.fragment_mail_no_order);
         Button orderButton = (Button) view.findViewById(R.id.fragment_mail_order);
         allOrderButton.setOnClickListener(new OnClickAllOrderMailFragment(this));
         noOrderButton.setOnClickListener(new OnClickNoOrderMailFragment(this));
         orderButton.setOnClickListener(new OnClickOrderMailFragment(this));
-        if (MainActivity.user!=null)
-        {
-            // TODO linearLayout.setVisibility(View.GONE);
-
-
-        }
-        else
-        {
-           // recyclerView.setVisibility(View.GONE);
+        if (MainActivity.user!=null) {
+            linearLayout.setVisibility(View.GONE);
+        } else {
+            linearLayout.setVisibility(View.VISIBLE);
         }
         maillogin.setOnClickListener(new ButtonListener());
     }
@@ -102,7 +100,7 @@ public class MailFragment extends Fragment {
             }
         }
     }
-    private void downloadData() {
+    public void downloadData() {
         mList.clear();
         if (MainActivity.user == null)
             return;
@@ -114,30 +112,39 @@ public class MailFragment extends Fragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 // 连接失败
+                Log.e("net", "Connect Fail");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    JSONArray array = JSON.parseObject(response.body().string()).getJSONArray("TaskList");
+                    JSONObject object = JSON.parseObject(response.body().string());
+                    JSONArray array = object.getJSONArray("TaskList");
                     for (int i=0;i<array.size();i++) {
-                        Request expressRequest = new Request.Builder().build(); // 快递公司查询接口 TODO
+                        JSONObject taskJSON = array.getJSONObject(i);
+                        Request expressRequest = new Request.Builder()
+                                .url(String.format(Locale.CHINA, "http://%s/getExpressByID?orderid=%d", ServerAPI.SERVER_IP,taskJSON.getIntValue("expressID") ))
+                                .build();
                         Response expressResponse = client.newCall(expressRequest).execute();
+                        String expressName = expressResponse.body().string();
                         Request addressRequest = new Request.Builder()
-                                .url(String.format(Locale.CHINA, "http://%s/address", ServerAPI.SERVER_IP, MainActivity.user.id)) // 查询地址接口 TODO
+                                .url(String.format(Locale.CHINA, "http://%s/address?userID=%d", ServerAPI.SERVER_IP, MainActivity.user.id))
                                 .build();
                         Response addressResponse = client.newCall(addressRequest).execute();
-                        JSONObject taskJSON = array.getJSONObject(i);
-                        JSONObject expressJSON = JSON.parseObject(expressResponse.body().string());
-                        JSONObject addressJSON = JSON.parseObject(addressResponse.body().string());
-                        mList.add(new MailEntity(new Task(taskJSON), new Express(expressJSON), new Address(addressJSON)));
+                        JSONObject addressListObjectJSON = JSON.parseObject(addressResponse.body().string());
+                        JSONArray addressListJSON = addressListObjectJSON.getJSONArray("AddressList");
+                        if (addressListJSON.size() == 0)
+                            continue;
+                        JSONObject addressJSON = addressListJSON.getJSONObject(0);
+                        mList.add(new MailEntity(new Task(taskJSON), new Express(0, expressName, ""), new Address(addressJSON)));
                     }
                 }
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        ((RecyclerView)view.findViewById(R.id.mail_list)).getAdapter().notifyDataSetChanged();
+                        if (mailAdapter != null)
+                            mailAdapter.notifyDataSetChanged();
                     }
                 });
             }

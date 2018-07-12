@@ -55,14 +55,14 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:text="派送中："/>
+
     <LinearLayout
-        android:id="@+id/to_login"
+        android:id="@+id/to_login_home_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="250dp"

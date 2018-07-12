@@ -8,7 +8,7 @@
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
-        android:id="@+id/to_login_mail"
+        android:id="@+id/to_login_mail_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="16dp"

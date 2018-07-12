@@ -1,5 +1,6 @@
 package com.suheng.test1.activity;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 
+import com.alibaba.fastjson.JSON;
 import com.suheng.test1.entity.User;
 import com.suheng.test1.listener.OnPageChangeMailActivity;
 import com.suheng.test1.ui.HomeFragment;
@@ -28,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
     // Variables
     private ArrayList<Fragment> fgLists=new ArrayList<>(3);
 
-    public static User user = new User(666, "", "", "", "", "");
+    public static User user = null;
+    //public static User user = new User(666, "", "", "", "", "");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,29 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(new MPagerAdapter(getSupportFragmentManager(), fgLists));
         mViewPager.setOffscreenPageLimit(2);    //预加载剩下两页
         mViewPager.addOnPageChangeListener(new OnPageChangeMailActivity(bottomNavigationView));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_CANCELED)
+            return;
+        switch (requestCode) {
+            case 0:
+                String userJSON = data.getStringExtra("userJSON");
+                if (userJSON != null) {
+                    MainActivity.user = JSON.parseObject(userJSON, User.class);
+                    notifyDataChanged();
+                }
+                break;
+            default:
+                notifyDataChanged();
+        }
+
+    }
+
+    private void notifyDataChanged() {
+        ((HomeFragment)fgLists.get(0)).downloadData();
+        ((MailFragment)fgLists.get(1)).downloadData();
     }
 }
 

@@ -54,8 +54,8 @@ public class HomeFragment extends Fragment {
         //R.layout.fragment_my为该fragment的布局
         view=inflater.inflate(R.layout.fragment_home,container,false);
         initVariables();
-        loadData();
         initViews();
+        loadData();
         return view;
     }
 
@@ -73,21 +73,16 @@ public class HomeFragment extends Fragment {
     }
 
     private void initViews() {
-        linearLayout=(LinearLayout) view.findViewById(R.id.to_login);
+        linearLayout=(LinearLayout) view.findViewById(R.id.to_login_home_fragment);
         Button login_bt=(Button) view.findViewById(R.id.login) ;
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_home_items);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mailAdapter = new MailHomeAdapter(mList);
         recyclerView.setAdapter(new MailHomeAdapter(mList));
-        if (MainActivity.user!=null)
-        {
+        if (MainActivity.user!=null) {
             linearLayout.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-
-        }
-        else
-        {
-            recyclerView.setVisibility(View.GONE);
+        } else {
+            linearLayout.setVisibility(View.VISIBLE);
         }
         login_bt.setOnClickListener(new ButtonListener());
     }
@@ -101,7 +96,7 @@ public class HomeFragment extends Fragment {
             }
         }
     }
-    private void downloadData() {
+    public void downloadData() {
         mList.clear();
         if (MainActivity.user == null)
             return;
@@ -113,7 +108,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 // 连接失败
-                Log.e("net", "onFailure: ");
+                Log.e("net", "Connect Fail");
             }
 
             @Override
@@ -125,15 +120,17 @@ public class HomeFragment extends Fragment {
                         JSONObject taskJSON = array.getJSONObject(i);
                         Request expressRequest = new Request.Builder()
                                 .url(String.format(Locale.CHINA, "http://%s/getExpressByID?orderid=%d", ServerAPI.SERVER_IP,taskJSON.getIntValue("expressID") ))
-                                .build(); // 快递公司查询接口 TODO
+                                .build();
                         Response expressResponse = client.newCall(expressRequest).execute();
                         String expressName = expressResponse.body().string();
                         Request addressRequest = new Request.Builder()
-                                .url(String.format(Locale.CHINA, "http://%s/address?userID=%d", ServerAPI.SERVER_IP, 1)) // 查询地址接口 TODO
+                                .url(String.format(Locale.CHINA, "http://%s/address?userID=%d", ServerAPI.SERVER_IP, MainActivity.user.id))
                                 .build();
                         Response addressResponse = client.newCall(addressRequest).execute();
                         JSONObject addressListObjectJSON = JSON.parseObject(addressResponse.body().string());
                         JSONArray addressListJSON = addressListObjectJSON.getJSONArray("AddressList");
+                        if (addressListJSON.size() == 0)
+                            continue;
                         JSONObject addressJSON = addressListJSON.getJSONObject(0);
                         mList.add(new MailEntity(new Task(taskJSON), new Express(0, expressName, ""), new Address(addressJSON)));
                     }
@@ -142,7 +139,8 @@ public class HomeFragment extends Fragment {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        mailAdapter.notifyDataSetChanged();
+                        if (mailAdapter != null)
+                            mailAdapter.notifyDataSetChanged();
                     }
                 });
             }

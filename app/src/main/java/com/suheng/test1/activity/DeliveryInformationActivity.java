@@ -13,6 +13,7 @@ import java.util.Vector;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.suheng.test1.R;
 import com.suheng.test1.adapter.TraceAdapter;
 import com.suheng.test1.entity.Record;
@@ -46,7 +47,7 @@ public class DeliveryInformationActivity extends AppCompatActivity {
 
     private void initVariables() {
         mTraceList = new Vector<TraceEntity>();
-        taskID = getIntent().getIntExtra("taskID", 0);
+        taskID = getIntent().getIntExtra("taskID", -1);
         handler = new Handler(Looper.getMainLooper());
     }
 
@@ -73,7 +74,9 @@ public class DeliveryInformationActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    JSONArray array = JSON.parseObject(response.body().string()).getJSONArray("RecordList");
+                    String responseString = response.body().string();
+                    JSONObject recordListObjectJSON = JSON.parseObject(responseString);
+                    JSONArray array = recordListObjectJSON.getJSONArray("RecordList");
                     for (int i=0;i<array.size();i++) {
                         mTraceList.add(new TraceEntity(new Record(array.getJSONObject(i))));
                     }

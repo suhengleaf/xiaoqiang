@@ -23,14 +23,13 @@ public class Record {
     }
 
     public Record(JSONObject jsonObject) {
-        this.Record = jsonObject.getIntValue("Record");
-        this.taskID = jsonObject.getIntValue("taskID");
-        this.UID = jsonObject.getIntValue("UID");
-        this.detail = jsonObject.getString("detail");
+        this.Record = jsonObject.getIntValue("RecordID");
+        this.taskID = jsonObject.getIntValue("TaskID");
+        this.detail = jsonObject.getString("Detail");
         this.time = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy--MM--dd HH:mm:ss", Locale.CHINA);
         try {
-            time.setTime(sdf.parse(jsonObject.getString("time")));
+            time.setTime(sdf.parse(jsonObject.getString("Time")));
         } catch (ParseException e) {
             time.set(1, 1, 1);
         }

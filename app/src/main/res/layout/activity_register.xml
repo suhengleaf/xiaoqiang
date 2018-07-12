@@ -46,29 +46,95 @@
             android:layout_marginBottom="@dimen/normal_space"
             android:background="@color/normal_orange_color" />
 
-        <EditText
-            android:id="@+id/register_name"
+        <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/normal_input_height"
-            android:layout_marginLeft="@dimen/normal_space"
-            android:background="@drawable/mini_block_item_normal"
-            android:drawableLeft="@drawable/my_register_check_name"
-            android:drawablePadding="@dimen/normal_space"
-            android:hint="输入用户名"
-            android:inputType="text"
-            android:singleLine="true" />
+            android:layout_height="wrap_content"
+            android:stretchColumns="1">
 
-        <EditText
-            android:id="@+id/register_password"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/normal_input_height"
-            android:layout_marginLeft="@dimen/normal_space"
-            android:background="@drawable/mini_block_item_normal"
-            android:drawableLeft="@drawable/my_register_pass"
-            android:drawablePadding="@dimen/normal_space"
-            android:hint="@string/register_upass_default"
-            android:inputType="text"
-            android:singleLine="true" />
+            <TableRow>
+                <TextView
+                    android:text="用户名"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp"/>
+
+                <EditText
+                    android:id="@+id/register_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/normal_input_height"
+                    android:layout_marginLeft="@dimen/normal_space"
+                    android:background="@drawable/mini_block_item_normal"
+                    android:drawablePadding="@dimen/normal_space"
+                    android:hint="输入用户名"
+                    android:inputType="text"
+                    android:singleLine="true" />
+
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:text="密码"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp"/>
+
+                <EditText
+                    android:id="@+id/register_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/normal_input_height"
+                    android:layout_marginLeft="@dimen/normal_space"
+                    android:background="@drawable/mini_block_item_normal"
+                    android:drawablePadding="@dimen/normal_space"
+                    android:hint="输入密码"
+                    android:inputType="text"
+                    android:singleLine="true" />
+
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:text="昵称"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp"/>
+
+                <EditText
+                    android:id="@+id/register_nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/normal_input_height"
+                    android:layout_marginLeft="@dimen/normal_space"
+                    android:background="@drawable/mini_block_item_normal"
+                    android:drawablePadding="@dimen/normal_space"
+                    android:hint="输入昵称"
+                    android:inputType="text"
+                    android:singleLine="true" />
+
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:text="邮箱"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="16dp"/>
+
+                <EditText
+                    android:id="@+id/register_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/normal_input_height"
+                    android:layout_marginLeft="@dimen/normal_space"
+                    android:background="@drawable/mini_block_item_normal"
+                    android:drawablePadding="@dimen/normal_space"
+                    android:hint="输入邮箱"
+                    android:inputType="text"
+                    android:singleLine="true" />
+
+            </TableRow>
+        </TableLayout>
 
     </LinearLayout>
 

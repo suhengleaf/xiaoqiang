@@ -58,7 +58,7 @@
             android:background="@drawable/mini_block_item_normal"
             android:drawableLeft="@drawable/login_user"
             android:drawablePadding="@dimen/normal_space"
-            android:hint="手机号"
+            android:hint="账号"
             android:inputType="text"
             android:singleLine="true" />
 

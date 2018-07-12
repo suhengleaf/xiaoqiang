@@ -1,5 +1,7 @@
 package com.suheng.test1.entity;
 
+import com.alibaba.fastjson.JSONObject;
+
 public class User {
     public int id;                          // 用户ID
     public String nickname;                 // 昵称
@@ -15,5 +17,12 @@ public class User {
         this.password = password;
         this.HashPass = hashPass;
         this.email = email;
+    }
+
+    public User(JSONObject jsonObject) {
+        this.id = jsonObject.getIntValue("ID");
+        this.nickname = jsonObject.getString("NickName");
+        this.account = jsonObject.getString("Account");
+        this.email = jsonObject.getString("Email");
     }
 }
