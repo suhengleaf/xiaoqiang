@@ -1,5 +1,6 @@
 package com.suheng.test1.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 //import android.app.Fragment;
 import android.support.annotation.Nullable;
@@ -9,11 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.suheng.test1.R;
+import com.suheng.test1.activity.LoginActivity;
 import com.suheng.test1.activity.MainActivity;
 import com.suheng.test1.adapter.MailHomeAdapter;
 import com.suheng.test1.entity.Address;
@@ -21,7 +25,6 @@ import com.suheng.test1.entity.Express;
 import com.suheng.test1.entity.MailEntity;
 import com.suheng.test1.entity.Task;
 import com.suheng.test1.net.ServerAPI;
-import com.suheng.test1.utils.CalendarBuilder;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -37,6 +40,7 @@ import okhttp3.Response;
 public class HomeFragment extends Fragment {
     // Views
     private View view;
+    private LinearLayout linearLayout;
     // Variables
     private Vector<MailEntity> mList;
     @Nullable
@@ -64,11 +68,33 @@ public class HomeFragment extends Fragment {
     }
 
     private void initViews() {
+        linearLayout=(LinearLayout) view.findViewById(R.id.to_login);
+        Button login_bt=(Button) view.findViewById(R.id.login) ;
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_home_items);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new MailHomeAdapter(mList));
+        if (MainActivity.user!=null)
+        {
+            linearLayout.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+
+        }
+        else
+        {
+            recyclerView.setVisibility(View.GONE);
+        }
+        login_bt.setOnClickListener(new ButtonListener());
     }
 
+    private class ButtonListener implements View.OnClickListener {
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.login:
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    break;
+            }
+        }
+    }
     private void downloadData() {
         mList.clear();
         if (MainActivity.user == null)

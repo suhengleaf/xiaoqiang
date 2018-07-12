@@ -1,5 +1,6 @@
 package com.suheng.test1.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,11 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.suheng.test1.R;
+import com.suheng.test1.activity.LoginActivity;
 import com.suheng.test1.activity.MainActivity;
 import com.suheng.test1.adapter.MailAdapter;
 import com.suheng.test1.entity.Address;
@@ -40,7 +43,7 @@ public class MailFragment extends Fragment {
     View view;
     // Variables
     Vector<MailEntity> mList;
-
+    private LinearLayout linearLayout;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,6 +68,8 @@ public class MailFragment extends Fragment {
     }
 
     private void initViews() {
+        linearLayout=(LinearLayout) view.findViewById(R.id.to_login);
+        Button maillogin =(Button) view.findViewById(R.id.mail_login);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.mail_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new MailAdapter(mList));
@@ -74,8 +79,27 @@ public class MailFragment extends Fragment {
         allOrderButton.setOnClickListener(new OnClickAllOrderMailFragment(this));
         noOrderButton.setOnClickListener(new OnClickNoOrderMailFragment(this));
         orderButton.setOnClickListener(new OnClickOrderMailFragment(this));
-    }
+        if (MainActivity.user!=null)
+        {
+            linearLayout.setVisibility(View.GONE);
 
+
+        }
+        else
+        {
+           // recyclerView.setVisibility(View.GONE);
+        }
+        maillogin.setOnClickListener(new ButtonListener());
+    }
+    private class ButtonListener implements View.OnClickListener {
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.mail_login:
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    break;
+            }
+        }
+    }
     private void downloadData() {
         mList.clear();
         if (MainActivity.user == null)
