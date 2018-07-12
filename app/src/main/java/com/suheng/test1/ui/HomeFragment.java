@@ -3,10 +3,13 @@ package com.suheng.test1.ui;
 import android.content.Intent;
 import android.os.Bundle;
 //import android.app.Fragment;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.suheng.test1.R;
 import com.suheng.test1.activity.LoginActivity;
 import com.suheng.test1.activity.MainActivity;
+import com.suheng.test1.adapter.MailAdapter;
 import com.suheng.test1.adapter.MailHomeAdapter;
 import com.suheng.test1.entity.Address;
 import com.suheng.test1.entity.Express;
@@ -41,6 +45,7 @@ public class HomeFragment extends Fragment {
     // Views
     private View view;
     private LinearLayout linearLayout;
+    private MailHomeAdapter mailAdapter;
     // Variables
     private Vector<MailEntity> mList;
     @Nullable
@@ -72,6 +77,7 @@ public class HomeFragment extends Fragment {
         Button login_bt=(Button) view.findViewById(R.id.login) ;
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_home_items);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mailAdapter = new MailHomeAdapter(mList);
         recyclerView.setAdapter(new MailHomeAdapter(mList));
         if (MainActivity.user!=null)
         {
@@ -107,26 +113,38 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call call, IOException e) {
                 // 连接失败
+                Log.e("net", "onFailure: ");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    JSONArray array = JSON.parseObject(response.body().string()).getJSONArray("TaskList");
+                    JSONObject object = JSON.parseObject(response.body().string());
+                    JSONArray array = object.getJSONArray("TaskList");
                     for (int i=0;i<array.size();i++) {
-                        Request expressRequest = new Request.Builder().build(); // 快递公司查询接口 TODO
+                        JSONObject taskJSON = array.getJSONObject(i);
+                        Request expressRequest = new Request.Builder()
+                                .url(String.format(Locale.CHINA, "http://%s/getExpressByID?orderid=%d", ServerAPI.SERVER_IP,taskJSON.getIntValue("expressID") ))
+                                .build(); // 快递公司查询接口 TODO
                         Response expressResponse = client.newCall(expressRequest).execute();
+                        String expressName = expressResponse.body().string();
                         Request addressRequest = new Request.Builder()
-                                .url(String.format(Locale.CHINA, "http://%s/address", ServerAPI.SERVER_IP, MainActivity.user.id)) // 查询地址接口 TODO
+                                .url(String.format(Locale.CHINA, "http://%s/address?userID=%d", ServerAPI.SERVER_IP, 1)) // 查询地址接口 TODO
                                 .build();
                         Response addressResponse = client.newCall(addressRequest).execute();
-                        JSONObject taskJSON = array.getJSONObject(i);
-                        JSONObject expressJSON = JSON.parseObject(expressResponse.body().string());
-                        JSONObject addressJSON = JSON.parseObject(addressResponse.body().string());
-                        mList.add(new MailEntity(new Task(taskJSON), new Express(expressJSON), new Address(addressJSON)));
+                        JSONObject addressListObjectJSON = JSON.parseObject(addressResponse.body().string());
+                        JSONArray addressListJSON = addressListObjectJSON.getJSONArray("AddressList");
+                        JSONObject addressJSON = addressListJSON.getJSONObject(0);
+                        mList.add(new MailEntity(new Task(taskJSON), new Express(0, expressName, ""), new Address(addressJSON)));
                     }
                 }
-                ((RecyclerView)view.findViewById(R.id.mail_list)).getAdapter().notifyDataSetChanged();
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mailAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
     }

@@ -2,6 +2,8 @@ package com.suheng.test1.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -60,7 +62,7 @@ public class MailFragment extends Fragment {
     }
 
     private void loadData() {
-        downloadData();
+        //downloadData();
     }
 
     private void initVariables() {
@@ -81,7 +83,7 @@ public class MailFragment extends Fragment {
         orderButton.setOnClickListener(new OnClickOrderMailFragment(this));
         if (MainActivity.user!=null)
         {
-            linearLayout.setVisibility(View.GONE);
+            // TODO linearLayout.setVisibility(View.GONE);
 
 
         }
@@ -131,7 +133,13 @@ public class MailFragment extends Fragment {
                         mList.add(new MailEntity(new Task(taskJSON), new Express(expressJSON), new Address(addressJSON)));
                     }
                 }
-                ((RecyclerView)view.findViewById(R.id.mail_list)).getAdapter().notifyDataSetChanged();
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((RecyclerView)view.findViewById(R.id.mail_list)).getAdapter().notifyDataSetChanged();
+                    }
+                });
             }
         });
     }

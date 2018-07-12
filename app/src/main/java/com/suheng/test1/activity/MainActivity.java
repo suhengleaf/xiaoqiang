@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     // Variables
     private ArrayList<Fragment> fgLists=new ArrayList<>(3);
 
-    public static User user = null;
+    public static User user = new User(666, "", "", "", "", "");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -16,9 +16,9 @@ public class Address {
     }
 
     public Address(JSONObject jsonObject) {
-        this.addressID = jsonObject.getIntValue("addressid");
-        this.area = jsonObject.getString("area");
-        this.description = jsonObject.getString("description");
-        this.UID = jsonObject.getIntValue("UID");
+        this.addressID = jsonObject.getIntValue("AddressID");
+        this.area = jsonObject.getString("Area");
+        this.description = jsonObject.getString("Description");
+        this.UID = jsonObject.getIntValue("UserID");
     }
 }

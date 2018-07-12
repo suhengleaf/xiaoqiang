@@ -33,18 +33,21 @@ public class Task {
     }
 
     public Task(JSONObject jsonObject) {
-        this.taskID = jsonObject.getIntValue("taskID");
-        this.order = jsonObject.getString("order");
-        this.expressID = jsonObject.getIntValue("expressID");
-        this.uid = jsonObject.getIntValue("UID");
-        this.carID = jsonObject.getIntValue("carID");
-        this.status = jsonObject.getString("status");
-        this.desID = jsonObject.getString("desID");
+        this.taskID = jsonObject.getIntValue("TaskID");
+        this.order = jsonObject.getString("Order");
+        this.expressID = jsonObject.getIntValue("ExpressID");
+        this.uid = jsonObject.getIntValue("UserID");
+        this.carID = jsonObject.getIntValue("CarID");
+        this.status = jsonObject.getString("Status");
+        this.desID = jsonObject.getString("DesID");
+        starttime = Calendar.getInstance();
+        deliverytime = Calendar.getInstance();
+        finishtime = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy--MM--dd HH:mm:ss", Locale.CHINA);
         try {
-            starttime.setTime(sdf.parse(jsonObject.getString("startTime")));
-            deliverytime.setTime(sdf.parse(jsonObject.getString("deliveryTime")));
-            finishtime.setTime(sdf.parse(jsonObject.getString("finishTime")));
+            starttime.setTime(sdf.parse(jsonObject.getString("StartTime")));
+            deliverytime.setTime(sdf.parse(jsonObject.getString("DeliveryTime")));
+            finishtime.setTime(sdf.parse(jsonObject.getString("FinishTime")));
         } catch (ParseException e) {
             starttime.set(1,1,1);
             deliverytime.set(1,1,1);

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.suheng.test1.activity.DeliveryInformationActivity;
 import com.suheng.test1.R;
 import com.suheng.test1.activity.LoginActivity;
+import com.suheng.test1.activity.TestActivity;
 
 public class PersonFragment extends Fragment {
     @Nullable
@@ -21,6 +22,7 @@ public class PersonFragment extends Fragment {
         //R.layout.fragment_my为该fragment的布局
         View view=inflater.inflate(R.layout.fragment_person,container,false);
         TextView loginText = (TextView) view.findViewById(R.id.loginText);
+        TextView update = (TextView) view.findViewById(R.id.update);
         TextView textView2 = (TextView)view.findViewById(R.id.See_delivery);
         textView2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,6 +32,7 @@ public class PersonFragment extends Fragment {
             }
         });
         loginText.setOnClickListener(new ButtonListener());
+        update.setOnClickListener(new ButtonListener());
         return view;
     }
 
@@ -38,6 +41,9 @@ public class PersonFragment extends Fragment {
             switch (view.getId()) {
                 case R.id.loginText:
                     startActivity(new Intent(getActivity(), LoginActivity.class));
+                    break;
+                case R.id.update:
+                    startActivity(new Intent(getActivity(), TestActivity.class));
                     break;
             }
         }

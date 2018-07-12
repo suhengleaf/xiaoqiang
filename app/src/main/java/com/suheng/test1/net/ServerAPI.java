@@ -1,5 +1,5 @@
 package com.suheng.test1.net;
 
 public class ServerAPI {
-    static public final String SERVER_IP = "192.168.52.11";
+    static public final String SERVER_IP = "172.20.127.198:8080";
 }
