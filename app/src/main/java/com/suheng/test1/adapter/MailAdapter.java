@@ -23,8 +23,9 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.MailItemViewHo
     private Vector<MailEntity> mList;
     private Activity activity;
 
-    public MailAdapter(Vector<MailEntity> mList) {
+    public MailAdapter(Vector<MailEntity> mList, Activity activity) {
         this.mList = mList;
+        this.activity = activity;
     }
 
     @Override

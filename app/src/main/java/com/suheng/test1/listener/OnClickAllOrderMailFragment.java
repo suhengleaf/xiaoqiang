@@ -24,5 +24,6 @@ public class OnClickAllOrderMailFragment implements View.OnClickListener {
         allOrderUnderline.setVisibility(View.VISIBLE);
         noOrderUnderline.setVisibility(View.INVISIBLE);
         orderUnderline.setVisibility(View.INVISIBLE);
+        fragment.setData(fragment.mList);
     }
 }

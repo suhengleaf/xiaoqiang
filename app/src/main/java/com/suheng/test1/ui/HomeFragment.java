@@ -151,17 +151,6 @@ public class HomeFragment extends Fragment {
                     Log.e("size1",mList.size()+"");
 
                 }
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mailAdapter != null)
-
-                            Log.e("size",mList.size()+"");
-                            mailAdapter.setmList(mList);
-                            mailAdapter.notifyDataSetChanged();
-                    }
-                });
             }
         });
     }

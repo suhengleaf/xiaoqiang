@@ -45,7 +45,7 @@ public class MailFragment extends Fragment {
     // Views
     View view;
     // Variables
-    Vector<MailEntity> mList;
+    public Vector<MailEntity> mList;
     MailAdapter mailAdapter;
     private LinearLayout linearLayout;
     @Nullable
@@ -65,11 +65,12 @@ public class MailFragment extends Fragment {
 
     private void loadData() {
         downloadData();
+        setData(mList);
     }
 
     private void initVariables() {
         mList = new Vector<MailEntity>();
-        mailAdapter = new MailAdapter(mList);
+        mailAdapter = new MailAdapter(mList, getActivity());
     }
 
     public void initViews() {
@@ -137,26 +138,20 @@ public class MailFragment extends Fragment {
                             continue;
                         JSONObject addressJSON = addressListJSON.getJSONObject(0);
                         mList.add(new MailEntity(new Task(taskJSON), new Express(0, expressName, ""), new Address(addressJSON)));
-                        MailFragment.this.getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (mailAdapter != null){
-                                    mailAdapter.setmList(mList);
-                                    mailAdapter.notifyDataSetChanged();
-                                }
-
-                            }
-                        });
                     }
                 }
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mailAdapter != null)
-                            mailAdapter.notifyDataSetChanged();
-                    }
-                });
+            }
+        });
+    }
+
+    public void setData(final Vector<MailEntity> entities) {
+        this.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mailAdapter != null){
+                    mailAdapter.setmList(entities);
+                    mailAdapter.notifyDataSetChanged();
+                }
             }
         });
     }

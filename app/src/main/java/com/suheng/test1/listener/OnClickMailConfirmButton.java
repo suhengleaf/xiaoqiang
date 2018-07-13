@@ -3,6 +3,7 @@ package com.suheng.test1.listener;
 import android.app.Activity;
 import android.view.View;
 
+import com.suheng.test1.activity.MainActivity;
 import com.suheng.test1.net.ServerAPI;
 
 import java.io.IOException;
@@ -30,7 +31,9 @@ public class OnClickMailConfirmButton implements View.OnClickListener {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(String.format(Locale.CHINA, "http://%s/confirm", ServerAPI.SERVER_IP))
-                .post(new FormBody.Builder().add("taskid", Integer.toString(taskID)).build())
+                .post(new FormBody.Builder()
+                        .add("taskid", Integer.toString(taskID))
+                        .build())
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -41,6 +44,14 @@ public class OnClickMailConfirmButton implements View.OnClickListener {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 // 成功
+                if (response.body().string().equals("done")) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((MainActivity)activity).notifyDataChanged();
+                        }
+                    });
+                }
             }
         });
     }

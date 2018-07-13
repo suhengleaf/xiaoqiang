@@ -3,7 +3,10 @@ package com.suheng.test1.listener;
 import android.view.View;
 
 import com.suheng.test1.R;
+import com.suheng.test1.entity.MailEntity;
 import com.suheng.test1.ui.MailFragment;
+
+import java.util.Vector;
 
 public class OnClickNoOrderMailFragment implements View.OnClickListener {
 
@@ -24,5 +27,11 @@ public class OnClickNoOrderMailFragment implements View.OnClickListener {
         allOrderUnderline.setVisibility(View.INVISIBLE);
         noOrderUnderline.setVisibility(View.VISIBLE);
         orderUnderline.setVisibility(View.INVISIBLE);
+        Vector<MailEntity> data = new Vector<MailEntity>();
+        for (MailEntity entity : fragment.mList) {
+            if (!entity.status.equals("已确认"))
+                data.add(entity);
+        }
+        fragment.setData(data);
     }
 }
