@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment {
         downloadData();
     }
 
-    private void initViews() {
+    public void initViews() {
         linearLayout=(LinearLayout) view.findViewById(R.id.to_login_home_fragment);
         Button login_bt=(Button) view.findViewById(R.id.login) ;
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_home_items);
@@ -91,7 +91,7 @@ public class HomeFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.login:
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    HomeFragment.this.getActivity().startActivityForResult(new Intent(HomeFragment.this.getActivity(), LoginActivity.class),0);
                     break;
             }
         }
@@ -116,7 +116,9 @@ public class HomeFragment extends Fragment {
                 if (response.isSuccessful()) {
                     JSONObject object = JSON.parseObject(response.body().string());
                     JSONArray array = object.getJSONArray("TaskList");
+                    Log.e("ssss",array.size()+"");
                     for (int i=0;i<array.size();i++) {
+                        Log.e("i",i+"");
                         JSONObject taskJSON = array.getJSONObject(i);
                         Request expressRequest = new Request.Builder()
                                 .url(String.format(Locale.CHINA, "http://%s/getExpressByID?orderid=%d", ServerAPI.SERVER_IP,taskJSON.getIntValue("expressID") ))
@@ -129,17 +131,34 @@ public class HomeFragment extends Fragment {
                         Response addressResponse = client.newCall(addressRequest).execute();
                         JSONObject addressListObjectJSON = JSON.parseObject(addressResponse.body().string());
                         JSONArray addressListJSON = addressListObjectJSON.getJSONArray("AddressList");
-                        if (addressListJSON.size() == 0)
+                        if (addressListJSON.size() == 0){
+                            Log.e("con"+i,i+"con");
                             continue;
+                        }
+                        Log.e("out","out");
                         JSONObject addressJSON = addressListJSON.getJSONObject(0);
                         mList.add(new MailEntity(new Task(taskJSON), new Express(0, expressName, ""), new Address(addressJSON)));
+                        Log.e("add","add");
+                        HomeFragment.this.getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.e("size3",mList.size()+"");
+                                mailAdapter.setmList(mList);
+                                mailAdapter.notifyDataSetChanged();
+                            }
+                        });
                     }
+                    Log.e("size1",mList.size()+"");
+
                 }
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
                         if (mailAdapter != null)
+
+                            Log.e("size",mList.size()+"");
+                            mailAdapter.setmList(mList);
                             mailAdapter.notifyDataSetChanged();
                     }
                 });

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 
 import com.alibaba.fastjson.JSON;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Fragment> fgLists=new ArrayList<>(3);
 
     public static User user = null;
-    //public static User user = new User(666, "", "", "", "", "");
+   // public static User user = new User(5, "", "", "", "", "");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             case 0:
                 String userJSON = data.getStringExtra("userJSON");
                 if (userJSON != null) {
+                    Log.e("user",userJSON);
                     MainActivity.user = JSON.parseObject(userJSON, User.class);
                     notifyDataChanged();
                 }
@@ -78,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void notifyDataChanged() {
+        ((HomeFragment)fgLists.get(0)).initViews();
+        ((MailFragment)fgLists.get(1)).initViews();
         ((HomeFragment)fgLists.get(0)).downloadData();
         ((MailFragment)fgLists.get(1)).downloadData();
     }

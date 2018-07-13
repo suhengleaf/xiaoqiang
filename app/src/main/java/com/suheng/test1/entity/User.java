@@ -19,6 +19,9 @@ public class User {
         this.email = email;
     }
 
+    public User() {
+    }
+
     public User(JSONObject jsonObject) {
         this.id = jsonObject.getIntValue("ID");
         this.nickname = jsonObject.getString("NickName");

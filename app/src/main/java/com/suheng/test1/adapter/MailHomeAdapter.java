@@ -69,5 +69,15 @@ public class MailHomeAdapter extends RecyclerView.Adapter<MailHomeAdapter.MailHo
             addressView.setText(String.format(Locale.CHINA, "派送地址：%s%s", entity.area, entity.description));
         }
 
+
+
+    }
+
+    public Vector<MailEntity> getmList() {
+        return mList;
+    }
+
+    public void setmList(Vector<MailEntity> mList) {
+        this.mList = mList;
     }
 }

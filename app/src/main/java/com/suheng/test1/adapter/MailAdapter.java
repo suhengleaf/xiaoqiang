@@ -81,4 +81,12 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.MailItemViewHo
             mailConfirmButton.setOnClickListener(new OnClickMailConfirmButton(entity.taskID, activity));
         }
     }
+
+    public Vector<MailEntity> getmList() {
+        return mList;
+    }
+
+    public void setmList(Vector<MailEntity> mList) {
+        this.mList = mList;
+    }
 }

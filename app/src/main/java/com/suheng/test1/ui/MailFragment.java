@@ -72,7 +72,7 @@ public class MailFragment extends Fragment {
         mailAdapter = new MailAdapter(mList);
     }
 
-    private void initViews() {
+    public void initViews() {
         linearLayout=(LinearLayout) view.findViewById(R.id.to_login_mail_fragment);
         Button maillogin =(Button) view.findViewById(R.id.mail_login);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.mail_list);
@@ -137,6 +137,16 @@ public class MailFragment extends Fragment {
                             continue;
                         JSONObject addressJSON = addressListJSON.getJSONObject(0);
                         mList.add(new MailEntity(new Task(taskJSON), new Express(0, expressName, ""), new Address(addressJSON)));
+                        MailFragment.this.getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mailAdapter != null){
+                                    mailAdapter.setmList(mList);
+                                    mailAdapter.notifyDataSetChanged();
+                                }
+
+                            }
+                        });
                     }
                 }
                 Handler handler = new Handler(Looper.getMainLooper());
