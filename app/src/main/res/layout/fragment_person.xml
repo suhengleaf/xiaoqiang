@@ -52,6 +52,18 @@
                 android:paddingLeft="@dimen/little_space"
                 android:text="点击登录"
                 android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/User_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/UserPhoto"
+                android:drawableRight="@drawable/arrow_normal"
+                android:paddingLeft="@dimen/little_space"
+                android:text=""
+                android:textSize="16dp" />
+
         </RelativeLayout>
 
         <LinearLayout

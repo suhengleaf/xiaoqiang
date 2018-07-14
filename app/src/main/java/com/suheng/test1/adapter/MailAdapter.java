@@ -80,6 +80,11 @@ public class MailAdapter extends RecyclerView.Adapter<MailAdapter.MailItemViewHo
             carIDView.setText(String.format(Locale.CHINA, "派送车辆：%d", entity.carID));
             mailDetailButton.setOnClickListener(new OnClickMailDetailButton(itemView.getContext(), entity.taskID));
             mailConfirmButton.setOnClickListener(new OnClickMailConfirmButton(entity.taskID, activity));
+            if(entity.status.equals("已确认")){
+                mailConfirmButton.setVisibility(View.GONE);
+            }else{
+                mailConfirmButton.setVisibility(View.VISIBLE);
+            }
         }
     }
 

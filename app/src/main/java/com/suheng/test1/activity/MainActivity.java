@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
     public void notifyDataChanged() {
         ((HomeFragment)fgLists.get(0)).initViews();
         ((MailFragment)fgLists.get(1)).initViews();
+        ((PersonFragment)fgLists.get(2)).initViews();
         ((HomeFragment)fgLists.get(0)).downloadData();
         ((MailFragment)fgLists.get(1)).downloadData();
     }
